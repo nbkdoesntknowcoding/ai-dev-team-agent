@@ -4,7 +4,6 @@ Multi-Agent Development System - Main Entry Point
 This module serves as the entry point for the multi-agent development system,
 responsible for initializing components, connecting services, and starting
 the agent network. It handles command-line arguments, configuration loading,
-system lifecycle management, and provides a CLI interface for interaction.
 """
 
 import argparse
