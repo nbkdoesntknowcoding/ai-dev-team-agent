@@ -24,7 +24,8 @@ from agents.base_agent import (
     TaskStatus, 
     TaskPriority,
     TaskContext,
-    AgentRole
+    AgentRole,
+    ModelProvider
 )
 
 # Set up logging
@@ -1091,11 +1092,8 @@ class DeploymentSpecialist(BaseAgent):
     """Agent specialized in deployment processes and CI/CD pipelines."""
     
     def __init__(
-        self, 
-        name: str,
-        preferred_ci_tool: str = "GitHub Actions",
-        preferred_deployment_strategy: str = "Blue-Green",
-        **kwargs
+        self, name, preferred_ci_tool="github_actions", preferred_deployment_strategy="blue-green", 
+        model_provider=ModelProvider.ANTHROPIC, model_name="claude-3-sonnet-20240229", **kwargs
     ):
         """Initialize the Deployment Specialist agent.
         
@@ -1105,9 +1103,13 @@ class DeploymentSpecialist(BaseAgent):
             preferred_deployment_strategy: Preferred deployment strategy
             **kwargs: Additional arguments to pass to the BaseAgent constructor
         """
+        self.preferred_ci_tool = "GitHub Actions"
+        self.preferred_deployment_strategy = "Continuous Deployment"
         super().__init__(
             name=name, 
-            agent_type=AgentRole.DEPLOYMENT, 
+            agent_type=AgentRole.DEPLOYMENT,
+            model_provider=model_provider,
+            model_name=model_name, 
             **kwargs
         )
         self.preferred_ci_tool = preferred_ci_tool
@@ -2001,7 +2003,7 @@ class DeploymentSpecialist(BaseAgent):
 class SecurityAnalyst(BaseAgent):
     """Agent specialized in security analysis and implementation."""
     
-    def __init__(self, name, security_frameworks=None, **kwargs):
+    def __init__(self, name, security_frameworks=None, model_provider=ModelProvider.ANTHROPIC, model_name="claude-3-sonnet-20240229", **kwargs):
         """Initialize the Security Analyst agent.
         
         Args:
@@ -2009,12 +2011,15 @@ class SecurityAnalyst(BaseAgent):
             security_frameworks: List of security frameworks to reference
             **kwargs: Additional arguments to pass to the BaseAgent constructor
         """
+        self.security_frameworks = ["OWASP", "NIST", "ISO 27001"]
         super().__init__(
             name=name, 
-            agent_type=AgentRole.SECURITY, 
+            agent_type=AgentRole.SECURITY,
+            model_provider=model_provider,
+            model_name=model_name, 
             **kwargs
         )
-        self.security_frameworks = security_frameworks or ["OWASP", "NIST"]
+        self.security_frameworks = security_frameworks or ["OWASP", "NIST", "ISO 27001"]
         self.security_frameworks = security_frameworks
         
         # Track security assessments

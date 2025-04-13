@@ -23,7 +23,8 @@ from agents.base_agent import (
     TaskStatus, 
     TaskPriority,
     TaskContext,
-    AgentRole
+    AgentRole,
+    ModelProvider
 )
 
 # Set up logging
@@ -108,14 +109,16 @@ class UsabilityTestResult(BaseModel):
 class CodeReviewer(BaseAgent):
     """Agent specialized in reviewing code for quality and correctness."""
     
-    def __init__(self, name, preferred_languages=None, review_checklist=None, **kwargs):
+    def __init__(self, name, preferred_languages=None, review_checklist=None, model_provider=ModelProvider.ANTHROPIC, model_name="claude-3-sonnet-20240229", **kwargs):
         # Initialize attributes before calling super().__init__
-        self.preferred_languages = preferred_languages or ["Python", "JavaScript", "TypeScript"]
+        self.preferred_languages = preferred_languages if isinstance(preferred_languages, list) else ["Python", "JavaScript", "TypeScript"]
         self.review_checklist = review_checklist or self._default_review_checklist()
         
         super().__init__(
             name=name,
             agent_type=AgentRole.CODE_REVIEWER,
+            model_provider=model_provider,
+            model_name=model_name,
             **kwargs
         )
         """Initialize the Code Reviewer agent.

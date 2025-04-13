@@ -25,7 +25,8 @@ from agents.base_agent import (
     TaskStatus, 
     TaskPriority,
     TaskContext,
-    AgentRole
+    AgentRole,
+    ModelProvider
 )
 
 # Set up logging
@@ -91,24 +92,23 @@ class ApplicationState(BaseModel):
 class UIComponentDeveloper(BaseAgent):
     """Agent specialized in creating UI components."""
     
-    def __init__(
-        self, 
-        name: str = "UI Component Developer",
-        preferred_framework: str = "React",
-        design_system: Optional[Dict[str, Any]] = None,
-        **kwargs
-    ):
+    def __init__(self, name, preferred_framework="React", design_system=None, model_provider=ModelProvider.ANTHROPIC, model_name="claude-3-sonnet-20240229", **kwargs):
         """Initialize the UI Component Developer agent.
         
         Args:
             name: Human-readable name for this agent
             preferred_framework: Preferred frontend framework
             design_system: Optional design system to follow
+            model_provider: Model provider to use
+            model_name: Model name to use
             **kwargs: Additional arguments to pass to the BaseAgent constructor
         """
+        self.design_system = None
         super().__init__(
             name=name, 
-            agent_type=AgentRole.UI_DEVELOPER, 
+            agent_type=AgentRole.UI_DEVELOPER,
+            model_provider=model_provider,
+            model_name=model_name, 
             **kwargs
         )
         self.preferred_framework = preferred_framework

@@ -25,7 +25,8 @@ from agents.base_agent import (
     TaskStatus, 
     TaskPriority,
     TaskContext,
-    AgentRole
+    AgentRole,
+    ModelProvider
 )
 
 # Set up logging
@@ -113,7 +114,7 @@ class DesignFeedback(BaseModel):
 class ArchitectureDesignerAgent(BaseAgent):
     """Agent specialized in designing system architecture."""
     
-    def __init__(self, name, ui_ux_designer_contact=None, **kwargs):
+    def __init__(self, name, ui_ux_designer_contact=None, model_provider=ModelProvider.ANTHROPIC, model_name="claude-3-sonnet-20240229", **kwargs):
         """Initialize the Architecture Designer agent.
         
         Args:
@@ -121,12 +122,14 @@ class ArchitectureDesignerAgent(BaseAgent):
             ui_ux_designer_contact: Contact information for the UI/UX designer
             **kwargs: Additional arguments to pass to the BaseAgent constructor
         """
+        self.ui_ux_designer_contact = None
         super().__init__(
             name=name, 
-            agent_type=AgentRole.ARCHITECTURE_DESIGNER, 
+            agent_type=AgentRole.ARCHITECTURE_DESIGNER,
+            model_provider=model_provider,
+            model_name=model_name, 
             **kwargs
         )
-        self.ui_ux_designer_contact = ui_ux_designer_contact
         self.ui_ux_designer_contact = ui_ux_designer_contact
         
         # Track architectures and designs
